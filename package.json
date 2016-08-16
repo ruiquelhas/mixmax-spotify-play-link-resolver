@@ -1,0 +1,40 @@
+{
+  "name": "mixmax-spotify-play-link-resolver",
+  "version": "0.0.0",
+  "description": "Embed a Spotify player in your emails",
+  "main": "lib/index.js",
+  "bin": {
+    "mixmax-spotify-play": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "lab -a code -t 100 -L",
+    "test-tap": "lab -a code -r tap -o tests.tap",
+    "test-cov-html": "lab -a code -r html -o coverage.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ruiquelhas/mixmax-spotify-play-link-resolver.git"
+  },
+  "keywords": [
+    "email",
+    "mixmax",
+    "spotify",
+    "widget"
+  ],
+  "author": "Rui Quelhas <rfpquelhas@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ruiquelhas/mixmax-spotify-play-link-resolver/issues"
+  },
+  "homepage": "https://github.com/ruiquelhas/mixmax-spotify-play-link-resolver#readme",
+  "devDependencies": {
+    "code": "^3.0.2",
+    "lab": "^11.0.0"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "dependencies": {
+    "hapi": "^14.2.0"
+  }
+}
