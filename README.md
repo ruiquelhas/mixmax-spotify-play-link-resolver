@@ -15,3 +15,9 @@ Follow the instructions [here](http://sdk.mixmax.com/docs/tutorial-giphy-link-pr
 ```bash
 $ ./node_modules/.bin/mixmax-spotify-play
 ```
+
+The regular expression should also match a valid Spotify track link, such as:
+
+```
+open.spotify.com/track/[^\/]+-[^\/]+$
+```
