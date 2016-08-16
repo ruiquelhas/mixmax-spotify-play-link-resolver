@@ -1,6 +1,6 @@
 {
   "name": "mixmax-spotify-play-link-resolver",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Embed a Spotify player in your emails",
   "main": "lib/index.js",
   "bin": {
