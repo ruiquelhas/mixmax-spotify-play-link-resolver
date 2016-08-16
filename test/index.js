@@ -21,7 +21,7 @@ lab.experiment('mixmax-spotify-play-link-resolver', () => {
 
     lab.test('returns an error if no query is provided', (done) => {
 
-        server.inject('/resolve', (response) => {
+        server.inject('/resolver', (response) => {
 
             Code.expect(response.statusCode).to.equal(400);
             Code.expect(response.result).to.include('validation');
@@ -37,7 +37,7 @@ lab.experiment('mixmax-spotify-play-link-resolver', () => {
 
         const query = Qs.stringify({ url: 'https://www.foo.com' });
 
-        server.inject(`/resolve?${query}`, (response) => {
+        server.inject(`/resolver?${query}`, (response) => {
 
             Code.expect(response.statusCode).to.equal(400);
             Code.expect(response.result).to.include('validation');
@@ -53,7 +53,7 @@ lab.experiment('mixmax-spotify-play-link-resolver', () => {
 
         const query = Qs.stringify({ user: 'foo@bar.com' });
 
-        server.inject(`/resolve?${query}`, (response) => {
+        server.inject(`/resolver?${query}`, (response) => {
 
             Code.expect(response.statusCode).to.equal(400);
             Code.expect(response.result).to.include('validation');
@@ -69,7 +69,7 @@ lab.experiment('mixmax-spotify-play-link-resolver', () => {
 
         const query = Qs.stringify({ url: 'https://foo.bar.com', user: 'foo@bar.com' });
 
-        server.inject(`/resolve?${query}`, (response) => {
+        server.inject(`/resolver?${query}`, (response) => {
 
             Code.expect(response.statusCode).to.equal(400);
             Code.expect(response.result).to.include('validation');
@@ -88,7 +88,7 @@ lab.experiment('mixmax-spotify-play-link-resolver', () => {
             user: 'foo@bar.com'
         });
 
-        server.inject(`/resolve?${query}`, (response) => {
+        server.inject(`/resolver?${query}`, (response) => {
 
             const mixmax = { body: '<iframe src="https://embed.spotify.com/?uri=spotify:track:2TpxZ7JUBn3uw46aR7qd6V&theme=black&view=list" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>' };
 
@@ -99,81 +99,26 @@ lab.experiment('mixmax-spotify-play-link-resolver', () => {
         });
     });
 
-    lab.test('returns error if the custom widget theme is not valid', (done) => {
+    lab.test('returns error if the custom widget style properties are not valid', (done) => {
 
         const query = Qs.stringify({
             url: 'http://open.spotify.com/track/2TpxZ7JUBn3uw46aR7qd6V',
             user: 'foo@bar.com',
-            theme: 'yellow'
+            options: {
+                theme: 'yellow',
+                view: 'single',
+                height: 10,
+                width: 10
+            }
         });
 
-        server.inject(`/resolve?${query}`, (response) => {
+        server.inject(`/resolver?${query}`, (response) => {
 
             Code.expect(response.statusCode).to.equal(400);
             Code.expect(response.result).to.include('validation');
             Code.expect(response.result.validation).to.include('source', 'keys');
             Code.expect(response.result.validation.source).to.equal('query');
-            Code.expect(response.result.validation.keys).to.only.include('theme');
-
-            done();
-        });
-    });
-
-    lab.test('returns error if the custom widget view is not valid', (done) => {
-
-        const query = Qs.stringify({
-            url: 'http://open.spotify.com/track/2TpxZ7JUBn3uw46aR7qd6V',
-            user: 'foo@bar.com',
-            view: 'single'
-        });
-
-        server.inject(`/resolve?${query}`, (response) => {
-
-            Code.expect(response.statusCode).to.equal(400);
-            Code.expect(response.result).to.include('validation');
-            Code.expect(response.result.validation).to.include('source', 'keys');
-            Code.expect(response.result.validation.source).to.equal('query');
-            Code.expect(response.result.validation.keys).to.only.include('view');
-
-            done();
-        });
-    });
-
-    lab.test('returns error if the custom widget height is not valid', (done) => {
-
-        const query = Qs.stringify({
-            url: 'http://open.spotify.com/track/2TpxZ7JUBn3uw46aR7qd6V',
-            user: 'foo@bar.com',
-            height: 10
-        });
-
-        server.inject(`/resolve?${query}`, (response) => {
-
-            Code.expect(response.statusCode).to.equal(400);
-            Code.expect(response.result).to.include('validation');
-            Code.expect(response.result.validation).to.include('source', 'keys');
-            Code.expect(response.result.validation.source).to.equal('query');
-            Code.expect(response.result.validation.keys).to.only.include('height');
-
-            done();
-        });
-    });
-
-    lab.test('returns error if the custom widget width is not valid', (done) => {
-
-        const query = Qs.stringify({
-            url: 'http://open.spotify.com/track/2TpxZ7JUBn3uw46aR7qd6V',
-            user: 'foo@bar.com',
-            width: 10
-        });
-
-        server.inject(`/resolve?${query}`, (response) => {
-
-            Code.expect(response.statusCode).to.equal(400);
-            Code.expect(response.result).to.include('validation');
-            Code.expect(response.result.validation).to.include('source', 'keys');
-            Code.expect(response.result.validation.source).to.equal('query');
-            Code.expect(response.result.validation.keys).to.only.include('width');
+            Code.expect(response.result.validation.keys).to.only.include('options.theme', 'options.view', 'options.height', 'options.width');
 
             done();
         });
@@ -184,13 +129,15 @@ lab.experiment('mixmax-spotify-play-link-resolver', () => {
         const query = {
             url: 'http://open.spotify.com/track/2TpxZ7JUBn3uw46aR7qd6V',
             user: 'foo@bar.com',
-            theme: 'white',
-            view: 'coverart',
-            height: 400,
-            width: 400
+            options: {
+                theme: 'white',
+                view: 'coverart',
+                height: 400,
+                width: 400
+            }
         };
 
-        server.inject(`/resolve?${Qs.stringify(query)}`, (response) => {
+        server.inject(`/resolver?${Qs.stringify(query)}`, (response) => {
 
             const mixmax = { body: '<iframe src="https://embed.spotify.com/?uri=spotify:track:2TpxZ7JUBn3uw46aR7qd6V&theme=white&view=coverart" width="400" height="400" frameborder="0" allowtransparency="true"></iframe>' };
 
