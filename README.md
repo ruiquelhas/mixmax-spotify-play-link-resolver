@@ -16,6 +16,12 @@ Follow the instructions [here](http://sdk.mixmax.com/docs/tutorial-giphy-link-pr
 $ ./node_modules/.bin/mixmax-spotify-play
 ```
 
+If you want TLS support, make sure you have a valid certificate that matches the hostname.
+
+```bash
+$ ./node_modules/.bin/mixmax-spotify-play -k <tls_key_path> -c <tls_certificate_path>
+```
+
 The regular expression should also match a valid Spotify track link, such as:
 
 ```
